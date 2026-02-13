@@ -1,0 +1,8 @@
+#! --- IGNORE --- !#
+
+# User specific files/folders:
+/backend/node_modules
+/frontend/node_modules
+/backend/.env
+/backend/.env.local
+/.doc/
