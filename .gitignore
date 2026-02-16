@@ -5,4 +5,5 @@
 /frontend/node_modules
 /backend/.env
 /backend/.env.local
-/.doc/
+#/.doc/
+.help
