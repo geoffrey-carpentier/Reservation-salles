@@ -1,3 +1,31 @@
+@import "tailwindcss";
+
+/* Reset de base */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Classes utilitaires personnalisées */
+@layer components {
+  .btn {
+    @apply px-6 py-2 rounded-lg font-medium transition-all cursor-pointer;
+  }
+  .btn-primary {
+    @apply bg-indigo-600 text-white hover:bg-indigo-700;
+  }
+  .btn-danger {
+    @apply bg-red-600 text-white hover:bg-red-700;
+  }
+  .form-input {
+    @apply w-full px-4 py-2 border-2 border-gray-300 rounded-lg focus:border-indigo-500 focus:outline-none;
+  }
+  .card {
+    @apply bg-white rounded-lg shadow-md p-6;
+  }
+}
+
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
