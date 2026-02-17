@@ -95,7 +95,7 @@ npm run dev
 
 ### **Structure Backend**
 
-```
+```markdown
 backend/
 ├── config/db.js              # ✅ Connexion MySQL
 ├── models/
