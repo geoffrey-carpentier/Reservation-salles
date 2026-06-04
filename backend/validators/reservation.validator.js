@@ -18,10 +18,11 @@ export function isWeekday(date) {
  * @param {Date} date - Date/heure à vérifier
  * @returns {boolean}
  */
-export function isWithinWorkingHours(date) {
+export function isWithinWorkingHours(date, isEnd = false) {
     const hour = date.getHours();
     const minutes = date.getMinutes();
-    return hour >= 8 && hour < 19 && minutes === 0;
+    if (minutes !== 0) return false;
+    return isEnd ? (hour >= 9 && hour <= 19) : (hour >= 8 && hour < 19);
 }
 
 /**
