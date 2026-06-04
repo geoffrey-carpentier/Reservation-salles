@@ -4,8 +4,7 @@
 
 - **Version actuelle :** V1.0 (MVP en cours)
 - **Dernière mise à jour :** 17 février 2025
-- **Statut :** 🚧 Backend 100% - Frontend en attente
-
+- **Statut :** 🚧 Backend 100% - Frontend en cours
 ---
 
 ## 🎯 Objectif
