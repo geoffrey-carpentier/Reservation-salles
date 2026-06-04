@@ -143,21 +143,10 @@ export const Reservation = {
       SELECT COUNT(*) as count
       FROM reservations
       WHERE room_id = ?
-        AND (
-          (start_time < ? AND end_time > ?)
-          OR (start_time < ? AND end_time > ?)
-          OR (start_time >= ? AND end_time <= ?)
-        )
+        AND start_time < ?
+        AND end_time > ?
     `;
-        const params = [
-            roomId,
-            endTime,
-            startTime,
-            endTime,
-            startTime,
-            startTime,
-            endTime,
-        ];
+        const params = [roomId, endTime, startTime];
 
         if (excludeId) {
             sql += " AND id != ?";
