@@ -1,304 +1,252 @@
-# Starter Kit MERN
+# Réservation de Salle - TechSpace Solutions
 
-Ce template propose une base complète pour démarrer rapidement un projet **MERN** (MongoDB, Express, React, Node.js) avec une architecture claire, une API sécurisée (JWT), une gestion d’authentification, et une interface frontend moderne avec React + Vite.
+## 📌 État du projet
+
+- **Version actuelle :** V1.0 (MVP en cours)
+- **Dernière mise à jour :** 17 février 2025
+- **Statut :** 🚧 Backend 100% - Frontend en cours
+---
+
+## 🎯 Objectif
+
+Application Intranet de réservation de salle pour 50 collaborateurs.  
+**Salle unique** en V1, évolutif vers plusieurs salles en V2.
 
 ---
 
-## Sommaire
+## ✅ Fonctionnalités implémentées
 
-- [Fonctionnalités](#fonctionnalités)
-- [Structure du projet](#structure-du-projet)
-- [Prérequis](#prérequis)
-- [Installation & Lancement](#installation--lancement)
-  - [1. Backend (API Node.js + Express + MySQL)](#1-backend-api-nodejs--express--mysql)
-  - [2. Frontend (React + Vite)](#2-frontend-react--vite)
-- [Configuration](#configuration)
-  - [Variables d’environnement](#variables-denvironnement)
-- [Authentification JWT](#authentification-jwt)
-- [Utilisation avec Postman](#utilisation-avec-postman)
-- [Développement Frontend](#développement-frontend)
-- [Checklist finale](#checklist-finale)
-- [Crédits](#crédits)
+### **Backend (100% Fonctionnel)**
 
----
+- [x] Authentification JWT (inscription/connexion)
+- [x] Route GET /api/auth/me (profil utilisateur)
+- [x] Modèle User (CRUD complet)
+- [x] Modèle Reservation (CRUD + détection chevauchement)
+- [x] Validators métier (plage horaire 8h-19h, jours ouvrés, durée min 1h)
+- [x] Controller Reservation (7 endpoints)
+- [x] Routes API /api/reservations (toutes protégées JWT)
+- [x] Middleware authentification
+- [x] Protection propriétaire (update/delete)
 
-## Fonctionnalités
+### **Frontend**
 
-- **Backend Express (ES Modules)** avec gestion des utilisateurs, authentification JWT, hash des mots de passe (bcrypt), connexion MySQL (mysql2).
-- **Frontend React + Vite** avec gestion du contexte d’authentification, React Router, hooks personnalisés, composants réutilisables.
-- **Séparation claire** du code backend et frontend.
-- **Prêt pour le développement local et la production**.
-- **Support Tailwind CSS** (optionnel).
-- **Exemples d’utilisation avec Postman**.
+- [x] Pages Login/Register
+- [x] Dashboard protégé
+- [x] Context Auth (React)
+- [x] Tailwind CSS v4 configuré
+- [ ] Vue Planning hebdomadaire
+- [ ] Formulaire création réservation
+- [ ] Modification/Annulation réservation
 
 ---
 
-## Structure du projet
+## 📦 Installation
 
-```text
-starter-kit-MERN/
-│
-├── backend/
-│   ├── config/           # Connexion MySQL
-│   ├── controllers/      # Contrôleurs Express (auth)
-│   ├── middlewares/      # Middlewares (auth JWT)
-│   ├── models/           # Modèles (User)
-│   ├── routes/           # Routes Express
-│   ├── schema.sql        # Script SQL de création de la BDD
-│   ├── .env.example      # Exemple de configuration d'environnement
-│   ├── package.json
-│   └── server.js
-│
-├── frontend/
-│   ├── public/
-│   ├── src/
-│   │   ├── components/   # Composants réutilisables
-│   │   ├── contexts/     # Contextes React (auth)
-│   │   ├── hooks/        # Hooks personnalisés
-│   │   ├── layouts/      # Layouts de pages
-│   │   ├── pages/        # Pages principales (Home, Login, Register, Dashboard)
-│   │   ├── service/      # Services d'appel API
-│   │   ├── App.jsx
-│   │   ├── main.jsx
-│   │   └── index.css
-│   ├── package.json
-│   ├── vite.config.js
-│   └── README.md
-│
-├── .gitignore
-└── README.md
-```
+### **Prérequis**
 
----
+- Node.js >= 18.0.0
+- MySQL (Laragon recommandé)
+- Git
 
-## Prérequis
-
-- **Node.js** v18 ou supérieur
-- **npm** v9 ou supérieur
-- **MySQL** (ou MariaDB)
-- **Postman** (pour tester l’API)
-- **Git** (pour cloner le repo)
-
----
-
-## Installation & Lancement
-
-### 1. Backend (API Node.js + Express + MySQL)
+### **1. Cloner le projet**
 
 ```bash
-# Aller dans le dossier backend
+git clone https://github.com/geoffrey-carpentier/Reservation-salles.git
+cd Reservation-salles
+git checkout dev
+```
+
+### **2. Backend**
+
+```bash
 cd backend
-
-# Installer les dépendances
 npm install
 
-# Copier le fichier d'exemple d'environnement
-cp .env.example .env
+# Configurer .env (voir .env.example)
+# Initialiser la base de données
+mysql -u root < schema.sql
 
-# Modifier .env selon votre configuration MySQL et vos secrets JWT
-
-# Créer la base de données et la table users
-mysql -u root -p < shema.sql
-
-# Lancer le serveur de développement (auto-reload)
+# Démarrer le serveur
 npm run dev
+# ✅ Serveur sur http://localhost:5000
 ```
 
-Le serveur démarre sur [http://localhost:5000](http://localhost:5000).
-
----
-
-### 2. Frontend (React + Vite)
+### **3. Frontend**
 
 ```bash
-# Aller dans le dossier frontend
-cd frontend
-
-# Installer les dépendances
-npm install
-
-# Lancer le serveur de développement
-npm run dev
-```
-
-Le frontend démarre sur [http://localhost:5173](http://localhost:5173).
-
----
-
-## Configuration
-
-### Variables d’environnement
-
-- `JWT_SECRET`: Secret pour le JWT (ex: `my_secret_key`)
-- `MYSQL_HOST`: Hôte MySQL
-- `MYSQL_PORT`: Port MySQL
-- `MYSQL_USER`: Utilisateur MySQL
-- `MYSQL_PASSWORD`: Mot de passe MySQL
-- `MYSQL_DATABASE`: Nom de la base de données
-
-*Exemple de fichier `.env` pour le backend :*
-
-```dotenv
-PORT=5000
-DB_HOST=localhost
-DB_USER=root
-DB_PASSWORD=
-DB_NAME=starter_kit_MERN
-JWT_SECRET=remplacez_par_un_secret_complexe
-JWT_EXPIRES_IN=7d
-```
-
----
-
-## Authentification JWT
-
-- Le JWT est généré lors de la connexion.
-- Le JWT est envoyé dans le header `Authorization`.
-- Le JWT est valide pour 1 heure.
-- Le JWT est signé avec le secret `JWT_SECRET`.
-
-- **Inscription** : `POST /api/auth/register`
-- **Connexion** : `POST /api/auth/login`
-- **Profil protégé** : `GET /api/auth/me` (nécessite le header `Authorization: Bearer <token>`)
-
-Les tokens JWT sont stockés côté frontend (localStorage) et envoyés dans le header Authorization pour accéder aux routes protégées.
-
----
-
-## Utilisation avec Postman
-
-- Tester l’API avec Postman.
-- Utiliser les exemples d’utilisation dans le fichier `example-postman.json`.
-
-1. **Inscription**
-   - POST `http://localhost:5000/api/auth/register`
-   - Body (JSON) :
-  
-     ```json
-     {
-       "email": "test@example.com",
-       "password": "motdepasse",
-       "firstname": "John",
-       "lastname": "Doe"
-     }
-     ```
-
-2. **Connexion**
-   - POST `http://localhost:5000/api/auth/login`
-   - Body (JSON) :
-  
-     ```json
-     {
-       "email": "test@example.com",
-       "password": "motdepasse"
-     }
-     ```
-
-3. **Profil**
-   - GET `http://localhost:5000/api/auth/me`
-   - Header : `Authorization: Bearer <token>`
-
----
-
-## Développement Frontend
-
-- Utiliser React Router pour la navigation.
-- Utiliser React Context pour la gestion de l’authentification.
-- Utiliser React Hooks pour la gestion des états.
-- Utiliser React Components pour la création de pages.
-
-### Création du projet (rappel)
-
-````bash
-# Créer le projet React avec Vite
-npm create vite@latest frontend -- --template react
 cd frontend
 npm install
-npm install react-router-dom
+
+# Démarrer le dev server
 npm run dev
-````
+# ✅ Interface sur http://localhost:5173
+```
 
-⚠️ Le serveur démarre sur <http://localhost:5173> (pas 3000 comme Create React App)
+---
 
-### Installation Tailwind CSS v4 (optionnel)
+## 🏗️ Architecture Technique
+
+### **Stack**
+
+- **Frontend :** React 19 + Vite + React Router + Tailwind CSS v4
+- **Backend :** Node.js + Express + MySQL2
+- **Auth :** JWT + bcrypt
+
+### **Structure Backend**
+
+```markdown
+backend/
+├── config/db.js              # ✅ Connexion MySQL
+├── models/
+│   ├── user.model.js         # ✅ CRUD utilisateurs
+│   └── reservation.model.js  # ✅ CRUD réservations + chevauchement
+├── controllers/
+│   ├── auth.controller.js    # ✅ Register, Login, Me
+│   └── reservation.controller.js # ✅ 7 endpoints
+├── validators/
+│   └── reservation.validator.js # ✅ Règles métier
+├── middlewares/
+│   └── auth.middleware.js    # ✅ Vérification JWT
+└── routes/
+    ├── auth.routes.js        # ✅ /api/auth/*
+    └── reservations.routes.js # ✅ /api/reservations/*
+```
+
+---
+
+## 📚 API Endpoints
+
+### **Authentification**
+
+| Méthode | Endpoint             | Auth | Description        |
+| ------- | -------------------- | ---- | ------------------ |
+| POST    | `/api/auth/register` | ❌   | Inscription        |
+| POST    | `/api/auth/login`    | ❌   | Connexion (JWT)    |
+| GET     | `/api/auth/me`       | ✅   | Profil utilisateur |
+
+### **Réservations** (Toutes protégées JWT ✅)
+
+| Méthode | Endpoint                       | Description                                   |
+| ------- | ------------------------------ | --------------------------------------------- |
+| GET     | `/api/reservations`            | Toutes les réservations (avec infos user)     |
+| GET     | `/api/reservations/week/:date` | Réservations d'une semaine (lundi YYYY-MM-DD) |
+| GET     | `/api/reservations/user/me`    | Mes réservations                              |
+| GET     | `/api/reservations/:id`        | Détails d'une réservation                     |
+| POST    | `/api/reservations`            | Créer réservation (title, startTime, endTime) |
+| PUT     | `/api/reservations/:id`        | Modifier (propriétaire uniquement)            |
+| DELETE  | `/api/reservations/:id`        | Supprimer (propriétaire uniquement)           |
+
+---
+
+## 📚 Règles de Gestion
+
+### **Contraintes Horaires**
+
+- ✅ Lundi au vendredi uniquement
+- ✅ Plage horaire : 8h - 19h (heures pleines uniquement)
+- ✅ Durée minimum : 1 heure
+- ✅ Pas de réservation sur plusieurs jours
+- ✅ Détection automatique des chevauchements
+
+### **Sécurité**
+
+- ✅ Authentification obligatoire (JWT)
+- ✅ Passwords hashés (bcrypt)
+- ✅ Tokens expiration 7 jours
+- ✅ Requêtes préparées (protection SQL injection)
+- ✅ Validation côté serveur (validators)
+- ✅ Autorisation propriétaire (update/delete)
+
+### **Codes HTTP**
+
+- `200` OK
+- `201` Created
+- `400` Bad Request (validation échouée)
+- `401` Unauthorized (token manquant/invalide)
+- `403` Forbidden (pas propriétaire)
+- `404` Not Found
+- `409` Conflict (créneau déjà réservé)
+- `500` Internal Server Error
+
+---
+
+## 🧪 Tests Manuels (Backend)
+
+### **1. S'inscrire**
 
 ```bash
-npm install tailwindcss @tailwindcss/vite
+curl -X POST http://localhost:5000/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@test.com",
+    "password": "Test1234",
+    "firstname": "John",
+    "lastname": "Doe"
+  }'
 ```
 
-Ajoutez le plugin dans `vite.config.js` :
-
-```js
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
-
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-})
-```
-
-**index.css** :
-
-```css
-@import "tailwindcss";
-
-@layer components {
- .btn { @apply px-6 py-2 rounded-lg font-medium transition-all; }
- .btn-primary { @apply bg-indigo-600 text-white hover:bg-indigo-700; }
- .form-input { @apply w-full px-4 py-2 border-2 rounded-lg; }
-}
-```
-
-### Icônes FontAwesome (optionnel)
+### **2. Se connecter**
 
 ```bash
-npm i --save @fortawesome/react-fontawesome@latest
-npm i --save @fortawesome/fontawesome-svg-core
-npm i --save @fortawesome/free-solid-svg-icons
-npm i --save @fortawesome/free-regular-svg-icons
-npm i --save @fortawesome/free-brands-svg-icons
+curl -X POST http://localhost:5000/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{
+    "email": "test@test.com",
+    "password": "Test1234"
+  }'
+```
+
+**Copier le `token` retourné**
+
+### **3. Créer une réservation**
+
+```bash
+curl -X POST http://localhost:5000/api/reservations \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer VOTRE_TOKEN" \
+  -d '{
+    "title": "Réunion équipe",
+    "startTime": "2025-02-17T14:00:00",
+    "endTime": "2025-02-17T16:00:00"
+  }'
+```
+
+### **4. Voir toutes les réservations**
+
+```bash
+curl http://localhost:5000/api/reservations \
+  -H "Authorization: Bearer VOTRE_TOKEN"
 ```
 
 ---
 
-## Checklist finale
+## 📋 Prochaines Étapes
 
-- [x] **Backend** : API Express, connexion MySQL, JWT, routes auth OK
-- [x] **Frontend** : React + Vite, contextes, hooks, pages, navigation, Header + Footer OK
-- [x] **Sécurité** : Hash des mots de passe, tokens JWT, CORS configuré
-- [x] **Tests Postman** : Register, Login, Profil protégés OK
-- [x] **Documentation** : Ce README complet
+### **Phase 5 : Frontend Planning** (En attente)
 
----
+- [ ] Composant Planning hebdomadaire (grille 8h-19h)
+- [ ] Composant ReservationCard
+- [ ] Formulaire création/modification
+- [ ] Intégration API (axios)
+- [ ] Gestion états (loading, erreurs)
 
-## Documentation
+### **Phase 6 : Tests & Livrable MVP**
 
-- [React + Vite](https://vitejs.dev)
-- [React Router](https://reactrouter.com)
-- [React Context](https://reactjs.org/docs/context-api.html)
-- [Express + MySQL](https://expressjs.com)
-- [JWT](https://jwt.io)
-
----
-
-## Crédits
-
-Starter Kit MERN inspiré des bonnes pratiques modernes Node.js, Express, React et Vite.
+- [ ] Tests Postman collection complète
+- [ ] Tests manuels frontend
+- [ ] Documentation utilisateur
+- [ ] Démo vidéo
 
 ---
 
-*Pour toute question ou suggestion, ouvrez une issue sur le dépôt GitHub !*
+## 👥 Équipe
+
+**Développeur :** Geoffrey Carpentier  
+**Client :** TechSpace Solutions  
+**Formateur :** La Plateforme\_
 
 ---
 
-## Licence
+## 📄 Licence
 
-Ce projet est open-source, sous licence MIT.
-
-- **MIT License**
-- **Starter Kit MERN**: Template de départ pour un projet MERN.
-[GitHub](https://github.com/geoffrey-carpentier/starter-kit-mern)
-- **React + Vite**: Framework moderne pour le frontend.
-- **Express + MySQL**: Backend robuste et performant.
-- **JWT**: Authentification sécurisée
+Projet pédagogique - Tous droits réservés
