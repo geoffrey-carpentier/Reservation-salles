@@ -65,12 +65,12 @@ export function validateReservation(startTime, endTime) {
     }
 
     // 4. Plage horaire 8h-19h (heures pleines)
-    if (!isWithinWorkingHours(start)) {
+    if (!isWithinWorkingHours(start, false)) {
         errors.push(
             "L'heure de début doit être entre 8h et 19h (heure pleine)",
         );
     }
-    if (!isWithinWorkingHours(end)) {
+    if (!isWithinWorkingHours(end, true)) {
         errors.push("L'heure de fin doit être entre 8h et 19h (heure pleine)");
     }
 
