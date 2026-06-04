@@ -129,6 +129,13 @@ export const updateReservation = async (req, res) => {
         const { title, startTime, endTime } = req.body;
         const userId = req.user.id;
 
+        // Validation des champs requis
+        if (!title || !startTime || !endTime) {
+            return res.status(400).json({
+                message: "Champs requis : title, startTime, endTime",
+            });
+        }
+
         // Vérifier que la réservation existe
         const reservation = await Reservation.findById(id);
         if (!reservation) {
