@@ -10,6 +10,8 @@ import Home from "./pages/Home.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
+import Planning from "./pages/Planning.jsx";
+import Profile from "./pages/Profile.jsx";
 
 function App() {
   const { loading } = useAuth();
@@ -26,6 +28,22 @@ function App() {
           element={
             <PrivateRoute>
               <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/planning"
+          element={
+            <PrivateRoute>
+              <Planning />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <PrivateRoute>
+              <Profile />
             </PrivateRoute>
           }
         />

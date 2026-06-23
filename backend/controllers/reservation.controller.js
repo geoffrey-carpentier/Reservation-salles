@@ -71,7 +71,8 @@ export const getReservationById = async (req, res) => {
  */
 export const createReservation = async (req, res) => {
     try {
-        const { title, startTime, endTime } = req.body;
+        const title = req.body.title?.trim();
+        const { startTime, endTime } = req.body;
         const userId = req.user.id; // Récupéré via authMiddleware
 
         // Validation champs requis
@@ -79,6 +80,11 @@ export const createReservation = async (req, res) => {
             return res.status(400).json({
                 message: "Champs requis : title, startTime, endTime",
             });
+        }
+        if (title.length > 255) {
+            return res
+                .status(400)
+                .json({ message: "L'objet de la réunion est trop long (255 caractères max)" });
         }
 
         // Validation règles métier
@@ -126,7 +132,8 @@ export const createReservation = async (req, res) => {
 export const updateReservation = async (req, res) => {
     try {
         const { id } = req.params;
-        const { title, startTime, endTime } = req.body;
+        const title = req.body.title?.trim();
+        const { startTime, endTime } = req.body;
         const userId = req.user.id;
 
         // Validation des champs requis
@@ -135,12 +142,10 @@ export const updateReservation = async (req, res) => {
                 message: "Champs requis : title, startTime, endTime",
             });
         }
-
-        // Validation des champs requis
-        if (!title || !startTime || !endTime) {
-            return res.status(400).json({
-                message: "Champs requis : title, startTime, endTime",
-            });
+        if (title.length > 255) {
+            return res
+                .status(400)
+                .json({ message: "L'objet de la réunion est trop long (255 caractères max)" });
         }
 
         // Vérifier que la réservation existe

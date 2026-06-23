@@ -1,6 +1,9 @@
 // controllers/auth.controller.js
 import jwt from "jsonwebtoken";
 import User from "../models/user.model.js";
+
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // Génère un token JWT
 const generateToken = (user) => {
     return jwt.sign(
@@ -12,12 +15,30 @@ const generateToken = (user) => {
 // POST /api/auth/register
 export const register = async (req, res) => {
     try {
-        const { email, password, firstname, lastname } = req.body;
+        const email = req.body.email?.trim().toLowerCase();
+        const password = req.body.password;
+        const firstname = req.body.firstname?.trim();
+        const lastname = req.body.lastname?.trim();
+
         if (!email || !password || !firstname || !lastname) {
             return res
                 .status(400)
                 .json({ error: "Tous les champs sont requis" });
         }
+        if (!EMAIL_REGEX.test(email)) {
+            return res.status(400).json({ error: "Format d'email invalide" });
+        }
+        if (password.length < 6) {
+            return res
+                .status(400)
+                .json({ error: "Le mot de passe doit contenir au moins 6 caractères" });
+        }
+        if (firstname.length > 100 || lastname.length > 100) {
+            return res
+                .status(400)
+                .json({ error: "Prénom/nom trop long (100 caractères max)" });
+        }
+
         const existingUser = await User.findByEmail(email);
         if (existingUser) {
             return res.status(409).json({ error: "Email déjà utilisé" });
@@ -37,7 +58,15 @@ export const register = async (req, res) => {
 // POST /api/auth/login
 export const login = async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const email = req.body.email?.trim().toLowerCase();
+        const password = req.body.password;
+
+        if (!email || !password) {
+            return res
+                .status(400)
+                .json({ error: "Email et mot de passe requis" });
+        }
+
         const user = await User.findByEmail(email);
         if (!user || !(await User.verifyPassword(password, user.password))) {
             return res.status(401).json({ error: "Identifiants incorrects" });

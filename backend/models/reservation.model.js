@@ -67,8 +67,9 @@ export const Reservation = {
      */
     async findByWeek(weekStart) {
         const sql = `
-      SELECT 
+      SELECT
         r.id,
+        r.user_id,
         r.title,
         r.start_time,
         r.end_time,
@@ -76,7 +77,7 @@ export const Reservation = {
         u.lastname
       FROM reservations r
       LEFT JOIN users u ON r.user_id = u.id
-      WHERE r.start_time >= ? 
+      WHERE r.start_time >= ?
         AND r.start_time < DATE_ADD(?, INTERVAL 5 DAY)
       ORDER BY r.start_time ASC
     `;

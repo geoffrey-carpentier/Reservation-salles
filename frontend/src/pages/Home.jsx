@@ -5,17 +5,26 @@ function Home() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div>
-      <h1>Bienvenue sur le Starter Kit</h1>
-      <p>Template moderne React + Node.js + MySQL</p>
+    <div className="max-w-3xl mx-auto p-8 text-center">
+      <h1 className="text-3xl font-bold mb-2">Réservation de la salle de réunion</h1>
+      <p className="text-gray-600 mb-6">
+        TechSpace Solutions — réservez votre créneau en quelques clics, fini les
+        post-its et les doubles réservations.
+      </p>
 
-      <div>
+      <div className="flex justify-center gap-3">
         {isAuthenticated ? (
-          <Link to="/dashboard">Accéder au Dashboard</Link>
+          <Link to="/planning" className="btn btn-primary">
+            Voir le planning
+          </Link>
         ) : (
           <>
-            <Link to="/register">Commencer</Link>
-            <Link to="/login">Se connecter</Link>
+            <Link to="/register" className="btn btn-primary">
+              Commencer
+            </Link>
+            <Link to="/login" className="btn">
+              Se connecter
+            </Link>
           </>
         )}
       </div>

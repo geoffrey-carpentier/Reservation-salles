@@ -1,0 +1,27 @@
+import { useAuth } from "../hooks/useAuth.js";
+
+function Profile() {
+  const { user } = useAuth();
+
+  return (
+    <div className="max-w-md mx-auto p-4">
+      <h1 className="text-2xl font-semibold mb-4">Mon profil</h1>
+      <div className="card space-y-3">
+        <div>
+          <p className="text-sm text-gray-500">Prénom</p>
+          <p className="font-medium">{user?.firstname}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Nom</p>
+          <p className="font-medium">{user?.lastname}</p>
+        </div>
+        <div>
+          <p className="text-sm text-gray-500">Email</p>
+          <p className="font-medium">{user?.email}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default Profile;

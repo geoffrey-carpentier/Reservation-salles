@@ -1,5 +1,5 @@
 // services/api.js
-const API_URL = "http://localhost:5000/api";
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 async function fetchAPI(endpoint, options = {}) {
   const token = localStorage.getItem("token");
   const headers = {
@@ -35,4 +35,20 @@ export const authService = {
       body: JSON.stringify({ email, password }),
     }),
   getProfile: () => fetchAPI("/auth/me"),
+};
+
+export const reservationService = {
+  getWeek: (weekStart) => fetchAPI(`/reservations/week/${weekStart}`),
+  getMine: () => fetchAPI("/reservations/user/me"),
+  create: (data) =>
+    fetchAPI("/reservations", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+  update: (id, data) =>
+    fetchAPI(`/reservations/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(data),
+    }),
+  remove: (id) => fetchAPI(`/reservations/${id}`, { method: "DELETE" }),
 };
