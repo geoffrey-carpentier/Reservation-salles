@@ -16,7 +16,11 @@ import Profile from "./pages/Profile.jsx";
 function App() {
   const { loading } = useAuth();
 
-  if (loading) return ( <div><p>Chargement...</p></div>
+  if (loading)
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+        <p className="text-gray-600 dark:text-gray-400">Chargement...</p>
+      </div>
     );
   return (
     <Routes>

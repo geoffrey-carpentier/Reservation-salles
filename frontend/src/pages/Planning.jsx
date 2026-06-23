@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, Fragment } from "react";
 import { useAuth } from "../hooks/useAuth.js";
 import { reservationService } from "../services/api.js";
 import ReservationModal from "../components/ReservationModal.jsx";
@@ -12,6 +12,15 @@ import {
   isPastSlot,
 } from "../utils/date.js";
 
+function isToday(date) {
+  const today = new Date();
+  return (
+    date.getFullYear() === today.getFullYear() &&
+    date.getMonth() === today.getMonth() &&
+    date.getDate() === today.getDate()
+  );
+}
+
 function Planning() {
   const { user } = useAuth();
   const [weekOffset, setWeekOffset] = useState(0);
@@ -21,6 +30,7 @@ function Planning() {
   const [modalState, setModalState] = useState(null); // { mode: 'create'|'edit', slot, reservation }
 
   const monday = addDays(getMonday(), weekOffset * 7);
+  const currentHour = new Date().getHours();
 
   const loadWeek = useCallback(async () => {
     setLoading(true);
@@ -98,85 +108,125 @@ function Planning() {
 
   return (
     <div className="max-w-6xl mx-auto p-4">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-semibold">Planning de la salle</h1>
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+        <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
+          Planning de la salle
+        </h1>
         <div className="flex gap-2">
           <button className="btn" onClick={() => setWeekOffset((w) => w - 1)}>
-            ← Semaine précédente
+            ← Précédente
           </button>
-          <button className="btn" onClick={() => setWeekOffset(0)}>
+          <button className="btn btn-primary" onClick={() => setWeekOffset(0)}>
             Aujourd'hui
           </button>
           <button className="btn" onClick={() => setWeekOffset((w) => w + 1)}>
-            Semaine suivante →
+            Suivante →
           </button>
         </div>
       </div>
 
-      {error && <p className="text-red-600 mb-3">{error}</p>}
+      {error && <p className="text-red-600 dark:text-red-400 mb-3">{error}</p>}
+
       {loading ? (
-        <p>Chargement du planning...</p>
+        <p className="text-gray-600 dark:text-gray-400">Chargement du planning...</p>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full border-collapse text-sm">
-            <thead>
-              <tr>
-                <th className="border p-2 bg-gray-100 w-20">Heure</th>
-                {Array.from({ length: 5 }, (_, i) => (
-                  <th key={i} className="border p-2 bg-gray-100">
-                    {formatDayLabel(monday, i)}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {WORKING_HOURS.map((hour) => (
-                <tr key={hour}>
-                  <td className="border p-2 font-medium bg-gray-50">
-                    {String(hour).padStart(2, "0")}h00
-                  </td>
-                  {Array.from({ length: 5 }, (_, dayIndex) => {
-                    const reservation = findReservation(dayIndex, hour);
-                    const mine = reservation?.user_id === user?.id;
-                    const past = isPastSlot(monday, dayIndex, hour);
-                    return (
-                      <td
-                        key={dayIndex}
-                        onClick={() => handleCellClick(dayIndex, hour)}
-                        className={`border p-2 align-top h-14 ${
-                          reservation
-                            ? mine
-                              ? "bg-indigo-100 cursor-pointer hover:bg-indigo-200"
-                              : "bg-red-50"
-                            : past
-                              ? "bg-gray-50 text-gray-300"
-                              : "cursor-pointer hover:bg-green-50"
-                        }`}
-                      >
-                        {reservation ? (
-                          <div>
-                            <p className="font-medium truncate">{reservation.title}</p>
-                            <p className="text-xs text-gray-600">
-                              {reservation.firstname} {reservation.lastname}
-                            </p>
-                          </div>
-                        ) : (
-                          !past && <span className="text-xs text-gray-400">Libre</span>
-                        )}
-                      </td>
-                    );
-                  })}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+        <div className="card overflow-x-auto !p-0">
+          <div
+            className="grid min-w-[760px]"
+            style={{ gridTemplateColumns: "70px repeat(5, 1fr)" }}
+          >
+            {/* En-tête des jours */}
+            <div className="sticky left-0 bg-white dark:bg-gray-800" />
+            {Array.from({ length: 5 }, (_, i) => {
+              const today = isToday(addDays(monday, i));
+              return (
+                <div
+                  key={i}
+                  className={`px-2 py-3 text-center text-sm font-semibold border-b border-gray-200 dark:border-gray-700 ${
+                    today
+                      ? "text-brand-600 dark:text-brand-100"
+                      : "text-gray-600 dark:text-gray-300"
+                  }`}
+                >
+                  {formatDayLabel(monday, i)}
+                  {today && (
+                    <span className="block w-1.5 h-1.5 rounded-full bg-brand-500 mx-auto mt-1" />
+                  )}
+                </div>
+              );
+            })}
+
+            {/* Grille horaire */}
+            {WORKING_HOURS.map((hour) => (
+              <Fragment key={hour}>
+                <div className="px-2 py-3 text-xs text-right text-gray-400 dark:text-gray-500 border-t border-gray-100 dark:border-gray-700">
+                  {String(hour).padStart(2, "0")}h
+                </div>
+                {Array.from({ length: 5 }, (_, dayIndex) => {
+                  const reservation = findReservation(dayIndex, hour);
+                  const mine = reservation?.user_id === user?.id;
+                  const past = isPastSlot(monday, dayIndex, hour);
+                  const today = isToday(addDays(monday, dayIndex));
+                  const isNowRow = today && hour === currentHour;
+                  return (
+                    <div
+                      key={`${dayIndex}-${hour}`}
+                      onClick={() => handleCellClick(dayIndex, hour)}
+                      className={`relative min-h-14 px-1.5 py-1 border-t border-l border-gray-100 dark:border-gray-700 transition-colors ${
+                        today ? "bg-brand-50/40 dark:bg-brand-700/10" : ""
+                      } ${
+                        reservation
+                          ? mine
+                            ? "cursor-pointer"
+                            : ""
+                          : past
+                            ? ""
+                            : "cursor-pointer hover:bg-brand-50 dark:hover:bg-gray-700"
+                      }`}
+                    >
+                      {isNowRow && (
+                        <span className="absolute left-0 top-0 w-full h-0.5 bg-red-500" />
+                      )}
+                      {reservation ? (
+                        <div
+                          className={`h-full w-full rounded-lg px-2 py-1 text-xs leading-tight ${
+                            mine
+                              ? "bg-brand-500 text-white"
+                              : "bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-200"
+                          }`}
+                        >
+                          <p className="font-medium truncate">{reservation.title}</p>
+                          <p className="opacity-80 truncate">
+                            {reservation.firstname} {reservation.lastname}
+                          </p>
+                        </div>
+                      ) : (
+                        !past && (
+                          <span className="text-[11px] text-gray-300 dark:text-gray-500">
+                            Libre
+                          </span>
+                        )
+                      )}
+                    </div>
+                  );
+                })}
+              </Fragment>
+            ))}
+          </div>
         </div>
       )}
 
-      <div className="flex gap-4 mt-4 text-sm text-gray-600">
-        <span><span className="inline-block w-3 h-3 bg-indigo-100 border mr-1" /> Mes réservations</span>
-        <span><span className="inline-block w-3 h-3 bg-red-50 border mr-1" /> Occupé</span>
-        <span><span className="inline-block w-3 h-3 bg-white border mr-1" /> Libre</span>
+      <div className="flex gap-4 mt-4 text-sm text-gray-600 dark:text-gray-400">
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block w-3 h-3 rounded bg-brand-500" /> Mes réservations
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block w-3 h-3 rounded bg-gray-200 dark:bg-gray-600" /> Occupé
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block w-3 h-3 rounded border border-gray-300 dark:border-gray-600" />{" "}
+          Libre
+        </span>
       </div>
 
       {modalState && (

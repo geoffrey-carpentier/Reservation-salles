@@ -33,8 +33,10 @@ function Dashboard() {
 
   return (
     <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-2xl font-semibold mb-1">Bienvenue {user?.firstname} !</h1>
-      <p className="text-gray-600 mb-6">{user?.email}</p>
+      <h1 className="text-2xl font-semibold mb-1 text-gray-800 dark:text-gray-100">
+        Bienvenue {user?.firstname} !
+      </h1>
+      <p className="text-gray-600 dark:text-gray-400 mb-6">{user?.email}</p>
 
       <div className="flex gap-3 mb-6">
         <Link to="/planning" className="btn btn-primary">
@@ -45,19 +47,24 @@ function Dashboard() {
         </Link>
       </div>
 
-      <h2 className="text-lg font-semibold mb-3">Mes prochaines réservations</h2>
-      {error && <p className="text-red-600 mb-3">{error}</p>}
+      <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+        Mes prochaines réservations
+      </h2>
+      {error && <p className="text-red-600 dark:text-red-400 mb-3">{error}</p>}
       {loading ? (
-        <p>Chargement...</p>
+        <p className="text-gray-600 dark:text-gray-400">Chargement...</p>
       ) : upcoming.length === 0 ? (
-        <p className="text-gray-500">Aucune réservation à venir.</p>
+        <p className="text-gray-500 dark:text-gray-400">Aucune réservation à venir.</p>
       ) : (
         <ul className="space-y-2">
           {upcoming.map((r) => (
-            <li key={r.id} className="card flex items-center justify-between">
+            <li
+              key={r.id}
+              className="card flex items-center justify-between"
+            >
               <div>
-                <p className="font-medium">{r.title}</p>
-                <p className="text-sm text-gray-600">
+                <p className="font-medium text-gray-800 dark:text-gray-100">{r.title}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
                   {new Date(r.start_time).toLocaleString("fr-FR", {
                     weekday: "long",
                     day: "2-digit",

@@ -32,6 +32,7 @@ Remplace la gestion artisanale (post-its, emails, tableau blanc) par un planning
 - **Planning** : vue hebdomadaire (lundi-vendredi, 8h-19h) des créneaux libres et occupés, avec le nom du collaborateur ayant réservé chaque créneau.
 - **Réservations** : réserver un créneau libre (objet de la réunion, durée), modifier ou annuler sa propre réservation.
 - **Règles métier appliquées côté front et revérifiées côté back** : jours ouvrés, horaires 8h-19h, durée minimum 1h, pas de créneau passé, pas de chevauchement, seul le créateur peut modifier/annuler sa réservation.
+- **Thème clair / sombre** : bascule manuelle (persistée en `localStorage`, respecte la préférence système par défaut).
 
 ## Stack technique
 
@@ -65,9 +66,9 @@ Reservation-salles/
 │   ├── public/
 │   │   └── .htaccess           # Fallback SPA + headers, utile uniquement si le build est servi par Apache
 │   ├── src/
-│   │   ├── components/         # Header, Footer, PrivateRoute, ReservationModal...
-│   │   ├── contexts/           # AuthContext (état d'authentification global)
-│   │   ├── hooks/               # useAuth
+│   │   ├── components/         # Header, Footer, PrivateRoute, ReservationModal, ThemeToggle...
+│   │   ├── contexts/           # AuthContext, ThemeContext (état global auth / thème)
+│   │   ├── hooks/               # useAuth, useTheme
 │   │   ├── layouts/             # MainLayout (avec Header/Footer), AuthLayout (plein écran)
 │   │   ├── pages/                # Home, Login, Register, Dashboard, Planning, Profile
 │   │   ├── services/
@@ -77,7 +78,8 @@ Reservation-salles/
 │   ├── .env.example
 │   └── package.json
 │
-└── .ressources/                 # Documentation projet (CDC, brief client, maquettes...) — non versionnée
+├── package.json                 # Orchestration racine (concurrently : npm run dev)
+└── .ressources/                  # Documentation projet (CDC, brief client, maquettes...) — non versionnée
 ```
 
 ## Prérequis
@@ -93,14 +95,12 @@ Reservation-salles/
 git clone <url-du-repo> Reservation-salles
 cd Reservation-salles
 
-# 2. Installer les dépendances du backend
-cd backend
+# 2. Installer les dépendances (racine, backend, frontend en une commande)
 npm install
-
-# 3. Installer les dépendances du frontend
-cd ../frontend
-npm install
+npm run install:all
 ```
+
+> Le `package.json` à la racine ne sert qu'à orchestrer le lancement simultané du backend et du frontend (via `concurrently`) — chaque application garde ses propres dépendances et son propre `package.json`.
 
 ## Variables d'environnement
 
@@ -152,7 +152,15 @@ Le script crée la base `reservation_salle`, les tables `users`, `rooms`, `reser
 
 ## Lancement de l'application
 
-Deux terminaux séparés :
+**Option 1 — une seule commande (recommandé)**, depuis la racine du projet :
+
+```bash
+npm run dev
+```
+
+Lance le backend (`:5000`) et le frontend (`:5173`) en parallèle dans le même terminal (via `concurrently`), avec un préfixe `[BACKEND]`/`[FRONTEND]` sur chaque ligne de log.
+
+**Option 2 — deux terminaux séparés** (utile pour isoler les logs) :
 
 ```bash
 # Terminal 1 — backend (http://localhost:5000)

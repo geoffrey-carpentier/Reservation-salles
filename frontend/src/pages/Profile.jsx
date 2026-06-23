@@ -5,19 +5,21 @@ function Profile() {
 
   return (
     <div className="max-w-md mx-auto p-4">
-      <h1 className="text-2xl font-semibold mb-4">Mon profil</h1>
-      <div className="card space-y-3">
+      <h1 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
+        Mon profil
+      </h1>
+      <div className="card space-y-4">
         <div>
-          <p className="text-sm text-gray-500">Prénom</p>
-          <p className="font-medium">{user?.firstname}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Prénom</p>
+          <p className="font-medium text-gray-800 dark:text-gray-100">{user?.firstname}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Nom</p>
-          <p className="font-medium">{user?.lastname}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Nom</p>
+          <p className="font-medium text-gray-800 dark:text-gray-100">{user?.lastname}</p>
         </div>
         <div>
-          <p className="text-sm text-gray-500">Email</p>
-          <p className="font-medium">{user?.email}</p>
+          <p className="text-sm text-gray-500 dark:text-gray-400">Email</p>
+          <p className="font-medium text-gray-800 dark:text-gray-100">{user?.email}</p>
         </div>
       </div>
     </div>

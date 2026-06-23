@@ -56,19 +56,23 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
       <div className="card w-full max-w-md">
-        <h1 className="text-2xl font-semibold mb-4 text-center">Créer un compte</h1>
+        <h1 className="text-2xl font-semibold mb-4 text-center text-gray-800 dark:text-gray-100">
+          Créer un compte
+        </h1>
 
         {error && (
-          <p className="text-red-600 text-sm mb-3" role="alert">
+          <p className="text-red-600 dark:text-red-400 text-sm mb-3" role="alert">
             {error}
           </p>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">Prénom</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              Prénom
+            </label>
             <input
               type="text"
               name="firstname"
@@ -81,7 +85,7 @@ function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Nom</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Nom</label>
             <input
               type="text"
               name="lastname"
@@ -94,7 +98,7 @@ function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Email</label>
             <input
               type="email"
               name="email"
@@ -107,7 +111,7 @@ function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
               Mot de passe
             </label>
             <input
@@ -122,7 +126,7 @@ function Register() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
               Confirmer le mot de passe
             </label>
             <input
@@ -140,7 +144,7 @@ function Register() {
             {loading ? "Inscription..." : "S'inscrire"}
           </button>
         </form>
-        <p className="text-sm text-center mt-4">
+        <p className="text-sm text-center mt-4 text-gray-600 dark:text-gray-400">
           Déjà un compte ? <Link to="/login">Se connecter</Link>
         </p>
       </div>

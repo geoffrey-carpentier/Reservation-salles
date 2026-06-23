@@ -56,23 +56,23 @@ function ReservationModal({ slot, reservation, dayLabel, onClose, onSubmit, onDe
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="card w-full max-w-md">
-        <h2 className="text-xl font-semibold mb-4">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
           {isEdit ? "Modifier la réservation" : "Réserver un créneau"}
         </h2>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
           {dayLabel} — {String(startHour).padStart(2, "0")}h00 à{" "}
           {String(startHour + duration).padStart(2, "0")}h00
         </p>
 
         {error && (
-          <p className="text-red-600 text-sm mb-3" role="alert">
+          <p className="text-red-600 dark:text-red-400 text-sm mb-3" role="alert">
             {error}
           </p>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
               Objet de la réunion
             </label>
             <input
@@ -88,7 +88,9 @@ function ReservationModal({ slot, reservation, dayLabel, onClose, onSubmit, onDe
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-1">Durée</label>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              Durée
+            </label>
             <select
               className="form-input"
               value={duration}

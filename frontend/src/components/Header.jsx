@@ -1,6 +1,7 @@
 // components/Header.jsx
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
+import ThemeToggle from "./ThemeToggle.jsx";
 
 function Header() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -11,18 +12,27 @@ function Header() {
   };
 
   const linkClass = ({ isActive }) =>
-    `px-3 py-2 rounded-md text-sm font-medium ${
-      isActive ? "bg-indigo-100 text-indigo-700" : "text-gray-600 hover:bg-gray-100"
+    `px-3 py-2 rounded-full text-sm font-medium transition-colors ${
+      isActive
+        ? "bg-brand-50 text-brand-700 dark:bg-brand-700/20 dark:text-brand-100"
+        : "text-gray-600 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700"
     }`;
 
   return (
-    <header className="bg-white border-b shadow-sm">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="font-semibold text-indigo-700">
-          Réservation de Salle
+    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-gray-200 dark:bg-gray-900/90 dark:border-gray-700">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+        <Link
+          to="/"
+          className="flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-100"
+        >
+          <span className="w-8 h-8 rounded-lg bg-brand-500 text-white flex items-center justify-center text-sm">
+            RS
+          </span>
+          <span className="hidden sm:inline">Réservation de Salle</span>
         </Link>
+
         <nav className="flex gap-1">
-          <NavLink to="/" className={linkClass}>
+          <NavLink to="/" className={linkClass} end>
             Accueil
           </NavLink>
           {isAuthenticated && (
@@ -39,10 +49,14 @@ function Header() {
             </>
           )}
         </nav>
-        <div className="flex items-center gap-3">
+
+        <div className="flex items-center gap-2">
+          <ThemeToggle />
           {isAuthenticated ? (
             <>
-              <span className="text-sm text-gray-600">{user?.firstname}</span>
+              <span className="hidden sm:inline text-sm text-gray-600 dark:text-gray-300">
+                {user?.firstname}
+              </span>
               <button className="btn btn-danger" onClick={handleLogout}>
                 Déconnexion
               </button>
