@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback, Fragment } from "react";
 import { useAuth } from "../hooks/useAuth.js";
+import { useToast } from "../hooks/useToast.js";
 import { reservationService } from "../services/api.js";
 import ReservationModal from "../components/ReservationModal.jsx";
 import {
@@ -23,6 +24,7 @@ function isToday(date) {
 
 function Planning() {
   const { user } = useAuth();
+  const { showToast } = useToast();
   const [weekOffset, setWeekOffset] = useState(0);
   const [reservations, setReservations] = useState([]);
   const [error, setError] = useState("");
@@ -30,7 +32,9 @@ function Planning() {
   const [modalState, setModalState] = useState(null); // { mode: 'create'|'edit', slot, reservation }
 
   const monday = addDays(getMonday(), weekOffset * 7);
-  const currentHour = new Date().getHours();
+  const now = new Date();
+  const currentHour = now.getHours();
+  const currentMinute = now.getMinutes();
 
   const loadWeek = useCallback(async () => {
     setLoading(true);
@@ -79,6 +83,7 @@ function Planning() {
       const startTime = buildSlotDateTime(monday, dayIndex, hour);
       const endTime = buildSlotDateTime(monday, dayIndex, hour + duration);
       await reservationService.create({ title, startTime, endTime });
+      showToast("Réservation créée");
     } else {
       const r = modalState.reservation;
       const startHour = new Date(r.start_time).getHours();
@@ -86,6 +91,7 @@ function Planning() {
       const startTime = buildSlotDateTime(monday, dayIndex, startHour);
       const endTime = buildSlotDateTime(monday, dayIndex, startHour + duration);
       await reservationService.update(r.id, { title, startTime, endTime });
+      showToast("Réservation modifiée");
     }
     closeModal();
     await loadWeek();
@@ -93,6 +99,7 @@ function Planning() {
 
   const handleDelete = async () => {
     await reservationService.remove(modalState.reservation.id);
+    showToast("Réservation annulée");
     closeModal();
     await loadWeek();
   };
@@ -107,7 +114,7 @@ function Planning() {
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-4">
+    <div className="page-container py-6">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <h1 className="text-2xl font-semibold text-gray-800 dark:text-gray-100">
           Planning de la salle
@@ -185,7 +192,10 @@ function Planning() {
                       }`}
                     >
                       {isNowRow && (
-                        <span className="absolute left-0 top-0 w-full h-0.5 bg-red-500" />
+                        <span
+                          className="absolute left-0 w-full h-0.5 bg-red-500 before:absolute before:-left-1 before:-top-[3px] before:w-2 before:h-2 before:rounded-full before:bg-red-500"
+                          style={{ top: `${(currentMinute / 60) * 100}%` }}
+                        />
                       )}
                       {reservation ? (
                         <div

@@ -1,5 +1,5 @@
 // App.jsx
-import { Routes, Route, Navigate } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import { useAuth } from "./hooks/useAuth.js";
 
 import MainLayout from "./layouts/MainLayout.jsx";
@@ -12,6 +12,7 @@ import Register from "./pages/Register.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Planning from "./pages/Planning.jsx";
 import Profile from "./pages/Profile.jsx";
+import NotFound from "./pages/NotFound.jsx";
 
 function App() {
   const { loading } = useAuth();
@@ -51,13 +52,13 @@ function App() {
             </PrivateRoute>
           }
         />
+        <Route path="*" element={<NotFound />} />
       </Route>
       {/* Routes SANS Header (plein écran) */}
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Route>
-      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 }

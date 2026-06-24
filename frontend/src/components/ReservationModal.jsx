@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useConfirm } from "../hooks/useConfirm.js";
 
 const DURATIONS = [1, 2, 3, 4];
 
@@ -21,6 +22,7 @@ function ReservationModal({ slot, reservation, dayLabel, onClose, onSubmit, onDe
   const [duration, setDuration] = useState(initialDuration);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const confirm = useConfirm();
 
   const maxDuration = 19 - startHour;
 
@@ -42,7 +44,7 @@ function ReservationModal({ slot, reservation, dayLabel, onClose, onSubmit, onDe
   };
 
   const handleDelete = async () => {
-    if (!window.confirm("Annuler cette réservation ?")) return;
+    if (!(await confirm("Annuler cette réservation ?"))) return;
     setLoading(true);
     setError("");
     try {

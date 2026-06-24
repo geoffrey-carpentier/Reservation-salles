@@ -5,7 +5,7 @@ function Home() {
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="max-w-3xl mx-auto p-8 text-center">
+    <div className="max-w-3xl mx-auto px-4 py-20 text-center">
       <h1 className="text-3xl font-bold mb-2 text-gray-800 dark:text-gray-100">
         Réservation de la salle de réunion
       </h1>

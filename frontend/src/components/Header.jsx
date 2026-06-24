@@ -20,7 +20,7 @@ function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 backdrop-blur border-b border-gray-200 dark:bg-gray-900/90 dark:border-gray-700">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-4">
+      <div className="page-container py-3 flex items-center justify-between gap-4">
         <Link
           to="/"
           className="flex items-center gap-2 font-semibold text-gray-800 dark:text-gray-100"

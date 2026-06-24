@@ -1,6 +1,6 @@
 # Réservation de Salle — TechSpace Solutions
 
-Application web de réservation de la salle de réunion de TechSpace Solutions. 
+Application web de réservation de la salle de réunion de TechSpace Solutions.
 Remplace la gestion artisanale (post-its, emails, tableau blanc) par un planning numérique partagé, sans conflits de double réservation.
 
 > Cahier des charges de référence : [`.ressources/CahierDesCharges/CDC_Reservation-salle_FINAL.md`](.ressources/CahierDesCharges/CDC_Reservation-salle_FINAL.md)
@@ -223,6 +223,15 @@ Authentification : header `Authorization: Bearer <token>` (token JWT retourné p
 - Rate-limiting sur `/auth/login` et `/auth/register` (anti brute-force).
 - Validation des entrées (format email, longueurs de champs) côté backend.
 - Secrets (`.env`) non versionnés (`.gitignore`).
+
+## Tests automatisés (backend)
+
+```bash
+cd backend
+npm test      # node --test (runner intégré à Node.js, aucune dépendance supplémentaire requise)
+```
+
+32 tests (unitaires sur les règles métier + intégration API avec `supertest`) couvrant l'inscription, la connexion, les permissions (403 si non-propriétaire), la création/modification/annulation de réservation, le rejet des créneaux passés et des chevauchements (409). Les tests s'exécutent contre la base configurée dans `.env` et nettoient leurs données après exécution.
 
 ## Plan de tests manuels
 

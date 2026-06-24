@@ -4,7 +4,7 @@ function Profile() {
   const { user } = useAuth();
 
   return (
-    <div className="max-w-md mx-auto p-4">
+    <div className="max-w-lg mx-auto px-4 py-8">
       <h1 className="text-2xl font-semibold mb-4 text-gray-800 dark:text-gray-100">
         Mon profil
       </h1>
