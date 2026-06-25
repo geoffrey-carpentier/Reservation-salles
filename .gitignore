@@ -5,12 +5,6 @@
 **/node_modules
 /backend/.env
 /backend/.env.local
-#/.doc/
-.help
-.ressources/
-.ressources/*
-.ressources/.sessions_history
-.Drafts
-/.doc/
 .help/
-.ressources/README_old.md
+.ressources/
+.Drafts

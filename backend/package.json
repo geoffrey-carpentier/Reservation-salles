@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "type": "module",
   "main": "server.js",
-  "description": "",
+  "description": "API REST de l'application de réservation de salle - TechSpace Solutions",
   "scripts": {
     "test": "node --test",
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["reservation", "salle", "express", "mysql"],
+  "author": "Geoffrey Carpentier",
   "license": "ISC",
   "dependencies": {
     "bcrypt": "^6.0.0",

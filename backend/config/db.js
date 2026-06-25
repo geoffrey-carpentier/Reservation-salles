@@ -1,7 +1,5 @@
 import mysql from "mysql2/promise";
-import dotenv from "dotenv";
-
-dotenv.config();
+// dotenv est déjà chargé par le point d'entrée (app.js / tests) via "dotenv/config"
 
 const pool = mysql.createPool({
     host: process.env.DB_HOST || "localhost",
