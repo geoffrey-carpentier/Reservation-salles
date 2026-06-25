@@ -7,18 +7,10 @@
 /backend/.env.local
 #/.doc/
 .help
-.ressources
+.ressources/
+.ressources/*
+.ressources/.sessions_history
 .Drafts
 /.doc/
 .help/
 .ressources/README_old.md
-.ressources/support/Conception.png
-.ressources/support/Guide_CahierDesCharges.pdf
-.ressources/support/Guide_Kanban.pdf
-.ressources/support/Guide_MCD_MLD_MPD.pdf
-.ressources/support/Guide_UserStories.pdf
-.ressources/support/Introduction_Projet_Web_Agile.pptx.pdf
-.ressources/support/Plan d_action Cahier des charges.png
-.ressources/support/Planning_2_Semaines.pdf
-.ressources/support/Support_UseCases_UserStories.pdf
-.ressources/support/Template Cahier des Charges du projet DWWM.pdf
