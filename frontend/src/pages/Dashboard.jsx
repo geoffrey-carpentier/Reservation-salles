@@ -1,12 +1,101 @@
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth.js";
+import { useConfirm } from "../hooks/useConfirm.js";
+import { useToast } from "../hooks/useToast.js";
+import { reservationService } from "../services/api.js";
 
 function Dashboard() {
   const { user } = useAuth();
+  const confirm = useConfirm();
+  const { showToast } = useToast();
+  const [reservations, setReservations] = useState([]);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    reservationService
+      .getMine()
+      .then((data) => setReservations(data))
+      .catch((err) => setError(err.message || "Impossible de charger vos réservations"))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const handleCancel = async (id) => {
+    if (!(await confirm("Annuler cette réservation ?"))) return;
+    try {
+      await reservationService.remove(id);
+      setReservations((prev) => prev.filter((r) => r.id !== id));
+      showToast("Réservation annulée");
+    } catch (err) {
+      showToast(err.message || "Erreur lors de l'annulation", "error");
+    }
+  };
+
+  const upcoming = reservations
+    .filter((r) => new Date(r.end_time) >= new Date())
+    .sort((a, b) => new Date(a.start_time) - new Date(b.start_time));
 
   return (
-    <div>
-      <h1>Bienvenue {user?.firstname} !</h1>
-      <p>Email : {user?.email}</p>
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <h1 className="text-2xl font-semibold mb-1 text-gray-800 dark:text-gray-100">
+        Bienvenue {user?.firstname} !
+      </h1>
+      <p className="text-gray-600 dark:text-gray-400 mb-6">{user?.email}</p>
+
+      <div className="flex gap-3 mb-6">
+        <Link to="/planning" className="btn btn-primary">
+          Voir le planning
+        </Link>
+        <Link to="/profile" className="btn">
+          Mon profil
+        </Link>
+      </div>
+
+      <h2 className="text-lg font-semibold mb-3 text-gray-800 dark:text-gray-100">
+        Mes prochaines réservations
+      </h2>
+      {error && <p className="text-red-600 dark:text-red-400 mb-3">{error}</p>}
+      {loading ? (
+        <p className="text-gray-600 dark:text-gray-400">Chargement...</p>
+      ) : upcoming.length === 0 ? (
+        <p className="text-gray-500 dark:text-gray-400">Aucune réservation à venir.</p>
+      ) : (
+        <ul className="space-y-2">
+          {upcoming.map((r) => (
+            <li
+              key={r.id}
+              className="card flex items-center justify-between"
+            >
+              <div>
+                <p className="font-medium text-gray-800 dark:text-gray-100">{r.title}</p>
+                <p className="text-sm text-gray-600 dark:text-gray-400">
+                  {new Date(r.start_time).toLocaleString("fr-FR", {
+                    weekday: "long",
+                    day: "2-digit",
+                    month: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}{" "}
+                  →{" "}
+                  {new Date(r.end_time).toLocaleTimeString("fr-FR", {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
+                </p>
+              </div>
+              <div className="flex gap-2">
+                <Link to="/planning" className="btn">
+                  Modifier
+                </Link>
+                <button className="btn btn-danger" onClick={() => handleCancel(r.id)}>
+                  Annuler
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

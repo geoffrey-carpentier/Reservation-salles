@@ -28,7 +28,6 @@ function Register() {
     e.preventDefault();
     setError("");
 
-    // Vérifications
     if (formData.password !== formData.confirmPassword) {
       setError("Les mots de passe ne correspondent pas");
       return;
@@ -57,79 +56,98 @@ function Register() {
   };
 
   return (
-    <div>
-      <h1>Créer un compte</h1>
+    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 p-4">
+      <div className="card w-full max-w-md">
+        <h1 className="text-2xl font-semibold mb-4 text-center text-gray-800 dark:text-gray-100">
+          Créer un compte
+        </h1>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+          <p className="text-red-600 dark:text-red-400 text-sm mb-3" role="alert">
+            {error}
+          </p>
+        )}
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Prénom</label>
-          <input
-            type="text"
-            name="firstname"
-            value={formData.firstname}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
-        </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              Prénom
+            </label>
+            <input
+              type="text"
+              name="firstname"
+              className="form-input"
+              value={formData.firstname}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            />
+          </div>
 
-        <div>
-          <label>Nom</label>
-          <input
-            type="text"
-            name="lastname"
-            value={formData.lastname}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Nom</label>
+            <input
+              type="text"
+              name="lastname"
+              className="form-input"
+              value={formData.lastname}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            />
+          </div>
 
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">Email</label>
+            <input
+              type="email"
+              name="email"
+              className="form-input"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            />
+          </div>
 
-        <div>
-          <label>Mot de passe</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
-        </div>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              Mot de passe
+            </label>
+            <input
+              type="password"
+              name="password"
+              className="form-input"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            />
+          </div>
 
-        <div>
-          <label>Confirmer le mot de passe</label>
-          <input
-            type="password"
-            name="confirmPassword"
-            value={formData.confirmPassword}
-            onChange={handleChange}
-            required
-            disabled={loading}
-          />
-        </div>
-        
-        <button type="submit" disabled={loading}>
-          {loading ? "Inscription..." : "S'inscrire"}
-        </button>
-      </form>
-      <p>
-        Déjà un compte ? <Link to="/login">Se connecter</Link>
-      </p>
+          <div>
+            <label className="block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300">
+              Confirmer le mot de passe
+            </label>
+            <input
+              type="password"
+              name="confirmPassword"
+              className="form-input"
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              required
+              disabled={loading}
+            />
+          </div>
+
+          <button type="submit" className="btn btn-primary w-full" disabled={loading}>
+            {loading ? "Inscription..." : "S'inscrire"}
+          </button>
+        </form>
+        <p className="text-sm text-center mt-4 text-gray-600 dark:text-gray-400">
+          Déjà un compte ? <Link to="/login">Se connecter</Link>
+        </p>
+      </div>
     </div>
   );
 }

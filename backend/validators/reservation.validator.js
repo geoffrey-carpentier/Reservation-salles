@@ -38,6 +38,15 @@ export function isMinimumDuration(startTime, endTime) {
 }
 
 /**
+ * Valide que la date de début n'est pas déjà passée
+ * @param {Date} startTime - Heure de début
+ * @returns {boolean}
+ */
+export function isNotInThePast(startTime) {
+    return startTime.getTime() >= Date.now();
+}
+
+/**
  * Validation complète d'une réservation
  * @param {string} startTime - ISO 8601 string
  * @param {string} endTime - ISO 8601 string
@@ -57,6 +66,11 @@ export function validateReservation(startTime, endTime) {
     // 2. Fin après début
     if (end <= start) {
         errors.push("L'heure de fin doit être après l'heure de début");
+    }
+
+    // 2bis. Pas de créneau passé
+    if (!isNotInThePast(start)) {
+        errors.push("Impossible de réserver un créneau déjà passé");
     }
 
     // 3. Jours ouvrés uniquement

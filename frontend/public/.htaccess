@@ -1,0 +1,22 @@
+# Actif uniquement quand le build (dist/) est servi par Apache (ex: Laragon en prod)
+# Sans effet en dev (serveur Vite) et sans effet sur l'API Node/Express.
+
+# Fallback SPA : toute route inconnue (gérée par React Router) renvoie vers index.html
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+  RewriteRule ^index\.html$ - [L]
+  RewriteCond %{REQUEST_FILENAME} !-f
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule . /index.html [L]
+</IfModule>
+
+# Headers de sécurité basiques (en complément de helmet côté API)
+<IfModule mod_headers.c>
+  Header set X-Content-Type-Options "nosniff"
+  Header set X-Frame-Options "SAMEORIGIN"
+  Header set Referrer-Policy "strict-origin-when-cross-origin"
+</IfModule>
+
+# Désactive le listing de répertoire
+Options -Indexes
