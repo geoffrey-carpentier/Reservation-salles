@@ -1,11 +1,13 @@
 #! --- IGNORE --- !#
 
-# User specific files/folders:
+# Dependances folder (run 'npm install' to restore them)
 /backend/node_modules
 /frontend/node_modules
 /node_modules/
-/backend/.env
-/backend/.env.local
-/.doc/
-/.ressources/
+
+# User specific files/folders:
+*.ressources/
+
+# Fichiers sensibles
 *.env
+*.env.local
