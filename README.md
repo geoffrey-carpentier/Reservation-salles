@@ -3,8 +3,6 @@
 Application web de réservation de la salle de réunion de TechSpace Solutions.
 Remplace la gestion artisanale (post-its, emails, tableau blanc) par un planning numérique partagé, sans conflits de double réservation.
 
-> Cahier des charges de référence : [`.ressources/CahierDesCharges/CDC_Reservation-salle_FINAL.md`](.ressources/CahierDesCharges/CDC_Reservation-salle_FINAL.md)
-
 ---
 
 ## Sommaire
